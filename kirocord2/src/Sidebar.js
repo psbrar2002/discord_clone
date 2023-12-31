@@ -4,6 +4,7 @@ import { AiOutlinePlus, AiOutlineDown } from 'react-icons/ai';
 import SidebarChannel from './SidebarChannel';
 import { FaSignal } from 'react-icons/fa';
 import { FaPhone, FaInfoCircle } from 'react-icons/fa';
+import { Avatar } from '@mui/material';
 
 
 
@@ -48,8 +49,16 @@ function Sidebar() {
                 <FaPhone/>
             </div>
             </div>
+            <div className="sidebar__profile">
+                <Avatar />
+                <div className="sidebar__profileInfo">
+                    <h3>@kiro</h3>
+                    <p>This is my id</p>
+                </div>
+            </div>
         </div> 
     );
 }
 
 export default Sidebar;
+//comment
