@@ -5,6 +5,7 @@ import SidebarChannel from './SidebarChannel';
 import { FaSignal } from 'react-icons/fa';
 import { FaPhone, FaInfoCircle } from 'react-icons/fa';
 import { Avatar } from '@mui/material';
+import { Headset, Mic, Settings } from '@mui/icons-material';
 
 
 
@@ -50,10 +51,15 @@ function Sidebar() {
             </div>
             </div>
             <div className="sidebar__profile">
-                <Avatar />
+                <Avatar src="https://images-ext-1.discordapp.net/external/VAvFhcYMku9FsIy-RbG8zyfvTJHj0BPY5nH5H1XsXIE/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/374304350580899842/d51ff21b14f78c6c7234d8bf4a5a34e4.png?format=webp&quality=lossless&width=352&height=352" />
                 <div className="sidebar__profileInfo">
-                    <h3>@kiro</h3>
-                    <p>This is my id</p>
+                    <h3>@Kiro</h3>
+                    <p>#This is my id</p>
+                </div>
+                <div className="sidebar__profileIcons">
+                    <Mic />
+                    <Headset />
+                    <Settings />
                 </div>
             </div>
         </div> 
