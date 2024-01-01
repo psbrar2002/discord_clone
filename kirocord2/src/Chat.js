@@ -2,6 +2,7 @@ import React from "react";
 import './Chat.css';
 import ChatHeader from "./ChatHeader";
 import { AddCircle, CardGiftcard, EmojiEmotions, GifOutlined } from "@mui/icons-material";
+import Message from "./Message";
 
 function Chat() {
     return (
@@ -9,7 +10,9 @@ function Chat() {
             <ChatHeader />
 
             <div className="chat__messages">
-
+                <Message />
+                <Message />
+                <Message />
             </div>
 
             <div className="chat__input">
