@@ -21,7 +21,7 @@ function Chat() {
         if (channelId) {
             db.collection('channels')
                 .doc(channelId).collection("messages")
-                .orderBy('timestamp', 'desc')
+                .orderBy('timestamp', 'asc') 
                 .onSnapshot((snapshot) =>
                     setMessages(snapshot.docs.map((doc) => doc.data()))
                 );
@@ -31,9 +31,10 @@ function Chat() {
     const sendMessage = e => {
         e.preventDefault();
         db.collection('channels').doc(channelId).collection('messages').add({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             message: input,
             user: user,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+
         });
         setInput("");
     };
@@ -44,7 +45,7 @@ function Chat() {
             <div className="chat__messages">
                 {messages.map((message) => (
                     <Message
-                        timestamp={message.message}
+                        timestamp={message.timestamp}
                         message={message.message}
                         user={message.user}
                     />
