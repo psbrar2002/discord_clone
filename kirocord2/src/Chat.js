@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import './Chat.css';
 import ChatHeader from "./ChatHeader";
 import { AddCircle, CardGiftcard, EmojiEmotions, GifOutlined } from "@mui/icons-material";
@@ -16,7 +16,11 @@ function Chat() {
     const channelName = useSelector(selectChannelName);
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState([]);
-
+    const messagesEndRef = useRef(null);
+    useEffect(() => {
+        // Scroll to the bottom of the messages when component mounts
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
     useEffect(() => {
         if (channelId) {
             db.collection('channels')
@@ -50,6 +54,7 @@ function Chat() {
                         user={message.user}
                     />
                 ))}
+                <div ref={messagesEndRef}></div>
             </div>
 
             <div className="chat__input">
