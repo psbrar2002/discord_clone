@@ -10,6 +10,7 @@ import db from "./firebase";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import 'firebase/compat/storage'; // Import Firebase Storage
 function Chat() {
     const channelId = useSelector(selectChannelId);
     const user = useSelector(selectUser);
@@ -17,6 +18,11 @@ function Chat() {
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
+    const fileInputRef = useRef(null);
+    const [fileDownloadUrl, setFileDownloadUrl] = useState(null);
+
+
+
     useEffect(() => {
         // Scroll to the bottom of the messages when component mounts
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,21 +36,50 @@ function Chat() {
                     setMessages(snapshot.docs.map((doc) => doc.data()))
                 );
         }
-
     }, [channelId]);
+
+
+    const handleFileChange = async (e) => {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+            try {
+                const storageRef = firebase.storage().ref();
+                const fileRef = storageRef.child(`channel_files/${channelId}/${selectedFile.name}`);
+
+                // Use await within the async function
+                const snapshot = await fileRef.put(selectedFile);
+
+                // Get the download URL
+                const downloadUrl = await snapshot.ref.getDownloadURL();
+
+                // Do something with the downloadUrl, for example, update the state
+                setFileDownloadUrl(downloadUrl);
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+        }
+    };
+
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        sendMessage();
+    };
+
     const sendMessage = e => {
         e.preventDefault();
-        if (input.trim() === '') {
-            // You can provide user feedback, e.g., show an alert or return early
-            return;
-        }
-        db.collection('channels').doc(channelId).collection('messages').add({
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            message: input,
-            user: user,
+        if (fileDownloadUrl || input.trim() !== '') {
+            // Add a message to Firestore
+            db.collection('channels').doc(channelId).collection('messages').add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                message: fileDownloadUrl ? `Uploaded a document: ${fileDownloadUrl}` : input,
+                user: user,
+            });
 
-        });
-        setInput("");
+            // Clear the fileDownloadUrl state and input field
+            setFileDownloadUrl(null);
+            setInput("");
+        }
     };
     return (
         <div className="chat">
@@ -62,8 +97,24 @@ function Chat() {
             </div>
 
             <div className="chat__input">
-                <AddCircle fontSize="large" />
-                <form>
+                <AddCircle
+                    fontSize="large"
+                    onClick={() => fileInputRef.current.click()}
+                />
+                {/* File input for document upload */}
+                <input
+                    type="file"
+                    accept=".pdf, .doc, .docx, .xls, .xlsx"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    style={{
+                        position: 'absolute',
+                        top: '-1000px', // Position off-screen
+                        left: '-1000px',
+                        opacity: '0',
+                    }} // Hide the file input
+                />
+                <form onSubmit={handleSendMessage}>
                     <input
                         value={input}
                         disabled={!channelId}

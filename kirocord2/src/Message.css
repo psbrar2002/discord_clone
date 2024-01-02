@@ -15,3 +15,8 @@
     margin-left: 20px;
     font-size: x-small;
 }
+.message a {
+    text-decoration: none;
+    color: inherit;
+    /* Inherit the color from the parent */
+}

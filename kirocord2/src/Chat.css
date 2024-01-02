@@ -51,4 +51,9 @@
     
     .chat__inputIcons>.MuiSvgIcon-root {
         padding: 5px;
+        cursor: pointer;
+        }
+        
+        .chat__inputIcons>.MuiSvgIcon-root:hover {
+            color: white;
 }
