@@ -34,6 +34,10 @@ function Chat() {
     }, [channelId]);
     const sendMessage = e => {
         e.preventDefault();
+        if (input.trim() === '') {
+            // You can provide user feedback, e.g., show an alert or return early
+            return;
+        }
         db.collection('channels').doc(channelId).collection('messages').add({
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             message: input,
