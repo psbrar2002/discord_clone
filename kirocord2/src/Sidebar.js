@@ -73,6 +73,7 @@ function Sidebar() {
                 <FaPhone/>
             </div>
             </div>
+
             <div className="sidebar__profile">
                 <Avatar onClick={() => auth.signOut()} src={user.photo} />
                 <div className="sidebar__profileInfo">
