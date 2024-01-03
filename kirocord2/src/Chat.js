@@ -63,22 +63,36 @@ function Chat() {
 
     const handleSendMessage = (e) => {
         e.preventDefault();
-        sendMessage();
+        sendMessage(e);
     };
 
-    const sendMessage = e => {
-        e.preventDefault();
-        if (fileDownloadUrl || input.trim() !== '') {
-            // Add a message to Firestore
+    const sendMessage = () => {
+        if (!channelId) {
+            return;
+        }
+
+        // Check if input is not empty or contains only whitespaces
+        if (input.trim() !== '') {
+            // If it's not a document, send a text message
+            const multilineMessage = input.split('\n').map((line) => line.trim()).join('\n');
             db.collection('channels').doc(channelId).collection('messages').add({
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                message: fileDownloadUrl ? `Uploaded a document: ${fileDownloadUrl}` : input,
+                message: multilineMessage,
                 user: user,
             });
 
-            // Clear the fileDownloadUrl state and input field
+            // Clear the input field
+            setInput('');
+        } else if (fileDownloadUrl) {
+            // Add a message with the document link to Firestore
+            db.collection('channels').doc(channelId).collection('messages').add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              message: `Uploaded a document: ${fileDownloadUrl}`,
+              user: user,
+          });
+
+            // Clear the fileDownloadUrl state
             setFileDownloadUrl(null);
-            setInput("");
         }
     };
     return (
@@ -115,11 +129,19 @@ function Chat() {
                     }} // Hide the file input
                 />
                 <form onSubmit={handleSendMessage}>
-                    <input
+                    <textarea
                         value={input}
                         disabled={!channelId}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder={`Message #${channelName}`} />
+                        placeholder={`Message #${channelName}`}
+                        onKeyDown={(e) => {
+                            // Check if "Enter" key is pressed without "Shift"
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault(); // Prevents the default behavior of "Enter" (submitting the form)
+                                sendMessage();
+                            }
+                        }}
+                    />
                     <button
                         disabled={!channelId}
                         className="chat__inputButton"

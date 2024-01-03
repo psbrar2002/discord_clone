@@ -24,25 +24,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
+    font-size: 14px;
+        padding: 10px;
     border-radius: 5px;
-        margin: 20px;
+        margin: 10px;
         border-top: 1px solid gray;
         background-color: #474b53;
     }
     
-    .chat__input>form>input {
-        padding: 15px;
-        background: transparent;
-        border: none;
-        width: 100%;
-        outline-width: 0;
-        color: white;
-        font-size: large;
-    }
-    
+
     .chat__input>form {
         flex: 1;
+        
     }
     
     .chat__inputButton {
@@ -56,4 +49,32 @@
         
         .chat__inputIcons>.MuiSvgIcon-root:hover {
             color: white;
+}
+.chat__input>form>input {
+    padding: 10px;
+    /* Adjust the padding as needed */
+    background: transparent;
+    border: none;
+    width: 100%;
+    outline-width: 0;
+    color: white;
+    font-size: 16px;
+    /* Adjust the font size as needed */
+}
+
+.chat__input>form>textarea {
+    padding: 15px;
+    background: transparent;
+    border: none;
+    width: 100%;
+    outline-width: 0;
+    color: white;
+    font-size: 16px;
+    /* Adjust the font size as needed */
+    line-height: 1.5;
+    white-space: pre-wrap;
+    resize: none;
+    height: 40px;
+    overflow-y: hidden;
+    transition: height 0.2s;
 }
